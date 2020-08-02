@@ -1,24 +1,21 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+
 
 module.exports = {
     entry: './src/js/index.js',
     output: {
-        filename: 'main.js',
-        path: path.resolve(__dirname, 'dist'),
+        filename: 'js/main.js',
+        path: path.resolve(__dirname, 'docs'),
     },
     devServer: {
-        contentBase: './dist',
+        contentBase: './docs',
     },
     plugins: [
         new HtmlWebpackPlugin({  // Also generate a test.html
             filename: 'index.html',
             template: 'src/index.html'
         }),
-    ],
-    plugins: [
-        new CleanWebpackPlugin(),
     ],
     module: {
         rules: [
