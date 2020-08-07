@@ -14,44 +14,67 @@ import Recipe from "./model/Recipe";
 
 const state = {};
 
+/**
+ * Хайлтын контроллер = Model ==> Controller <== View
+ */
 const controlSearch = async () => {
-	// 1) Вэбээс хайлтын түлхүүр үгийг гаргаж авна.
-	const query = searchView.getInput();
+  // 1) Вэбээс хайлтын түлхүүр үгийг гаргаж авна.
+  const query = searchView.getInput();
 
-	if (query) {
-		// 2) Шинээр хайлтын обьектийг үүсгэж өгнө.
-		state.search = new Search(query);
+  if (query) {
+    // 2) Шинээр хайлтын обьектийг үүсгэж өгнө.
+    state.search = new Search(query);
 
-		// 3) Хайлт хийхэд зориулж дэлгэцийг UI бэлтгэнэ.
-		searchView.clearSearchQuery();
-		searchView.clearSearchResult();
-		renderLoader(elements.searchResultDiv);
+    // 3) Хайлт хийхэд зориулж дэлгэцийг UI бэлтгэнэ.
+    searchView.clearSearchQuery();
+    searchView.clearSearchResult();
+    renderLoader(elements.searchResultDiv);
 
-		// 4) Хайлтыг гүйцэтгэнэ
-		await state.search.doSearch();
+    // 4) Хайлтыг гүйцэтгэнэ
+    await state.search.doSearch();
 
-		// 5) Хайлтын үр дүнг дэлгэцэнд үзүүлнэ.
-		clearLoader();
-		if (state.search.result === undefined) alert("Хайлтаар илэрцгүй...");
-		else searchView.renderRecipes(state.search.result);
-	}
+    // 5) Хайлтын үр дүнг дэлгэцэнд үзүүлнэ.
+    clearLoader();
+    if (state.search.result === undefined) alert("Хайлтаар илэрцгүй...");
+    else searchView.renderRecipes(state.search.result);
+  }
 };
 
-elements.searchForm.addEventListener("submit", (e) => {
-	e.preventDefault();
-	controlSearch();
+elements.searchForm.addEventListener("submit", e => {
+  e.preventDefault();
+  controlSearch();
 });
 
-elements.pageButtons.addEventListener("click", (e) => {
-	const btn = e.target.closest(".btn-inline");
+elements.pageButtons.addEventListener("click", e => {
+  const btn = e.target.closest(".btn-inline");
 
-	if (btn) {
-		// Бүхэл тоо аравтын тооллын систем руу хувилах учраас 10 гэсэ талбар нэмсэн
-		const gotoPageNumber = parseInt(btn.dataset.goto, 10);
-		searchView.clearSearchResult();
-		searchView.renderRecipes(state.search.result, gotoPageNumber);
-	}
+  if (btn) {
+    const gotoPageNumber = parseInt(btn.dataset.goto, 10);
+    searchView.clearSearchResult();
+    searchView.renderRecipes(state.search.result, gotoPageNumber);
+  }
 });
 
-const r = new Recipe(47746);
-r.getRecipe();
+/**
+ * Жорын контролллер
+ */
+const controlRecipe = async () => {
+  // 1) URL-аас ID-ийг салгаж
+  const id = window.location.hash.replace("#", "");
+
+  // 2) Жорын моделийг үүсгэж өгнө.
+  state.recipe = new Recipe(id);
+
+  // 3) UI дэлгэцийг бэлтгэнэ.
+
+  // 4) Жороо татаж авчирна.
+  await state.recipe.getRecipe();
+
+  // 5) Жорыг гүйцэтгэх хугацаа болон орцыг тооцоолно
+  state.recipe.calcTime();
+  state.recipe.calcHuniiToo();
+
+  // 6) Жороо дэлгэцэнд гаргана
+  console.log(state.recipe);
+};
+window.addEventListener("hashchange", controlRecipe);
