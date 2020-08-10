@@ -21,6 +21,7 @@ const controlSearch = async () => {
   // 1) Вэбээс хайлтын түлхүүр үгийг гаргаж авна.
   const query = searchView.getInput();
 
+  console.log("GG10101");
   if (query) {
     // 2) Шинээр хайлтын обьектийг үүсгэж өгнө.
     state.search = new Search(query);
