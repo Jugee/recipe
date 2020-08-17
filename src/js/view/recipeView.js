@@ -1,4 +1,5 @@
 import { elements } from "./base";
+import { result } from "lodash";
 
 const renderNairlaga = (orts) => {
     return `<li class="recipe__item">
@@ -13,6 +14,15 @@ const renderNairlaga = (orts) => {
             </li>`
 
 }
+
+export const highlightSelectedRecipe = id => {
+    const arr = Array.from(document.querySelectorAll('.results__link'));
+    arr.forEach(el => el.classList.remove('results__link--active'));
+    const domObj = document.querySelector(`a[href*="${id}"]`);
+    if (domObj) document.querySelector(`a[href*="${id}"]`).classList.add("results__link--active");
+
+};
+
 
 // Одоо дэлгэц дээр харагдаж байгаа жорыг арилгана.
 export const clearRecipe = () => {
