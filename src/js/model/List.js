@@ -1,27 +1,26 @@
 import uniqid from "uniqid";
 
+export default class List {
+  constructor() {
+    this.items = [];
+  }
 
-export default class list {
-    constructor() {
-        this.items = [];
-    }
+  deleteItem(id) {
+    // id гэдэг ID-тэй орцын индексийг массиваас хайж олно.
+    const index = this.items.findIndex(el => el.id === id);
 
-    deletItem(id) {
-        // id гэдэг id тэй орцыг массав аас хайж олно.
-        const index = this.items.findIndex(el => el.id === id);
-        // Уг индекс дээрх элментийг массиваас устгана
-        this.items.splice(index, 1);
+    // Уг индекс дээрх элементийг массиваас устгана
+    this.items.splice(index, 1);
+  }
 
-    }
+  addItem(item) {
+    let newItem = {
+      id: uniqid(),
+      item
+    };
 
-    addItem(item) {
-        let newItem = {
-            id: uniqid(),
-            // item: item
-            // es6 дээрхийг доорх байдлаар бичиж болно.
-            item
-        }
-        this.items.push(newItem);
-        return newItem;
-    }
+    this.items.push(newItem);
+
+    return newItem;
+  }
 }
